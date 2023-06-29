@@ -1,0 +1,3 @@
+﻿showTime, 1, DarkGray, White
+showStatus, 1, Green-Red
+showPath, 1, DarkCyan
