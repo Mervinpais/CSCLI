@@ -5,7 +5,7 @@ namespace CSCLI
     {
         public static void Load(string currentDirectory, int lastStatus = 0)
         {
-            foreach (string line in File.ReadAllLines("C:\\Users\\mervi\\Desktop\\CSCLI\\CSCLI\\config.txt"))
+            foreach (string line in File.ReadAllLines("config.txt"))
             {
                 Console.ResetColor();
                 string[] lineSplit = line.Trim().Split(',');

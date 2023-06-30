@@ -1,0 +1,28 @@
+﻿BASE COMMANDS;
+    - help: Displays information about available commands.
+
+    - print: Writes the provided text to the console.
+
+    - dir: Generates and displays a directory tree starting from the current directory.
+
+    - ls: Lists files in the current directory.
+
+    - cd: Changes the current directory to the specified directory.
+
+    - read: Reads and displays the contents of a specified file.
+
+    - clear: Clears the console screen.
+
+    - fileInfo: Displays information about a specified file, such as creation time and last modified time.
+
+    - find: Finds files in the main* directory        *based on current direectory
+
+    - version or -v: Displays the version of the Windows operating system.
+
+    - run: Executes an external program specified by the provided file name.
+
+    - grep: Searches for a specified term in all files within the current directory and displays the matching lines.
+
+    - exit: Exits the program.
+
+!= =!

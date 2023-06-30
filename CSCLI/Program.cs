@@ -70,28 +70,19 @@ namespace CSCLI
                     catch { }
                     continue;
                 }
-
-                if (command == null || command == "")
+                else if (command.StartsWith("exit") || command == "exit")
+                {
+                    BoxedText.Info("\n!!!EXITING CSCLI!!!");
+                    Environment.Exit(0);
+                }
+                else if (command == null || command == "")
                 {
                     command = NULL_VALUE;
                     continue;
                 }
                 else if (command.StartsWith("help"))
                 {
-                    Console.WriteLine("""
-                        help: Displays information about available commands.
-                        print: Writes the provided text to the console.
-                        dir: Generates and displays a directory tree starting from the current directory.
-                        ls: Lists files in the current directory.
-                        cd: Changes the current directory to the specified directory.
-                        read: Reads and displays the contents of a specified file.
-                        clear: Clears the console screen.
-                        fileInfo: Displays information about a specified file, such as creation time and last modified time.
-                        version or -v: Displays the version of the Windows operating system.
-                        run: Executes an external program specified by the provided file name.
-                        grep: Searches for a specified term in all files within the current directory and displays the matching lines.
-                        exit: Exits the program.
-                        """);
+                    Console.WriteLine(File.ReadAllText("Others\\helpContent.txt"));
                 }
                 else if (command.StartsWith("print"))
                 {
@@ -651,17 +642,62 @@ namespace CSCLI
                 }
                 else if (IsValidExpression(command))
                 {
-                    NCalc.Expression expr = new NCalc.Expression(command);
-                    Console.WriteLine(Convert.ToDouble(expr.Evaluate()));
+                    int Power(int n)
+                    {
+                        if (n == 0) return 1;
+                        else return 2 * Power(n - 1);
+                    }
+
+                    string expression = ""; // Store the expression formed by the numbers
+
+                    if (command.StartsWith("bin"))
+                    {
+                        string[] parts = command.Substring(4).Split(' ');
+
+                        foreach (string part in parts)
+                        {
+                            if (part.StartsWith("0b"))
+                            {
+                                // Binary number
+                                string binary = part.Substring(2);
+                                int decimalNumber = Convert.ToInt32(binary, 2);
+
+                                expression += decimalNumber.ToString(); // Append the decimal number to the expression
+                            }
+                            else
+                            {
+                                expression += part; // Append non-number parts to the expression as well
+                            }
+                        }
+                    }
+                    else if (command.StartsWith("hex"))
+                    {
+                        string[] parts = command.Substring(4).Split(' ');
+
+                        foreach (string part in parts)
+                        {
+                            if (part.StartsWith("0x"))
+                            {
+                                // Hexadecimal number
+                                string hex = part.Substring(2);
+                                int decimalNumber = Convert.ToInt32(hex, 16);
+
+                                expression += decimalNumber.ToString(); // Append the decimal number to the expression
+                            }
+                            else
+                            {
+                                expression += part; // Append non-number parts to the expression as well
+                            }
+                        }
+                    }
+                    NCalc.Expression expr = new NCalc.Expression(expression);
+                    double result = Convert.ToDouble(expr.Evaluate());
+                    Console.WriteLine(result);
                 }
+
                 else if (command.StartsWith("find"))
                 {
                     FileFindGUI.Show(currentDirectory);
-                }
-                else if (command.StartsWith("exit"))
-                {
-                    BoxedText.Info("\n!!!EXITING CSCLI!!!");
-                    Environment.Exit(0);
                 }
                 else
                 {
@@ -680,6 +716,16 @@ namespace CSCLI
             }
             bool IsValidExpression(string input)
             {
+                if (input == "exit") return false;
+
+                try
+                {
+                    input = input.Substring(4);
+                }
+                catch
+                {
+
+                }
                 // List of valid operators
                 char[] operators = { '+', '-', '*', '/' };
 
@@ -689,7 +735,7 @@ namespace CSCLI
                 // Check if the input contains only valid characters
                 foreach (char c in input)
                 {
-                    if (!Char.IsDigit(c) && !operators.Contains(c) && c != '(' && c != ')')
+                    if (!Char.IsDigit(c) && !operators.Contains(c) && c != '(' && c != ')' && c != 'b' && c != 'x')
                     {
                         return false;
                     }
@@ -733,7 +779,6 @@ namespace CSCLI
 
                 return parenthesesCount == 0;
             }
-
         }
     }
 }
